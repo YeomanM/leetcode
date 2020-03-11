@@ -1,5 +1,6 @@
 package com.leetcode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,6 +10,24 @@ import java.util.List;
  * @desc 120. 三角形最小路径和
  */
 public class MinimumTotal {
+
+    public static void main(String[] args) {
+        int[][] t = {
+                {2},
+                {3, 4},
+                {6, 5, 7},
+                {4, 1, 8, 3}
+        };
+        List<List<Integer>>triangle = new ArrayList<>();
+        for (int i = 0; i < t.length; i++) {
+            List<Integer> temp = new ArrayList<>();
+            triangle.add(temp);
+            for (int j = 0;j < t[i].length; j++) {
+                temp.add(t[i][j]);
+            }
+        }
+        System.out.println(new MinimumTotal().minimumTotal(triangle));
+    }
 
     public int minimumTotal(List<List<Integer>> triangle) {
         int len = triangle.size();
@@ -29,16 +48,18 @@ public class MinimumTotal {
                 if (stack[it - 1] != stack[it] - 1) {
                     sum -= triangle.get(it).get(stack[it]);
                     sum += triangle.get(it).get(stack[it] + 1);
+                    stack[it] = stack[it] + 1;
                     it--;
                     if (min > sum) {
                         min = sum;
                     }
+                } else {
+
                 }
             }
 
             while (it >= 0 && stack[it - 1] == stack[it] - 1) {
                 sum -= triangle.get(it).get(stack[it]);
-                temp = stack[it];
                 it--;
             }
 
@@ -46,8 +67,18 @@ public class MinimumTotal {
                 break;
             }
 
-            boolean r = stack[it - 1] == stack[it] - 1,f = true;
+            int k = stack[it],b = stack[it + 1] - 1;
+            boolean r =  k == b,f = true;
             while (it < len) {
+
+                if (it == len - 1) {
+                    sum += triangle.get(it).get(stack[it]);
+                    if (min > sum) {
+                        min = sum;
+                    }
+                    break;
+                }
+
                 if (r && f) {
                     if (it == 0) {
                         break;
@@ -56,15 +87,18 @@ public class MinimumTotal {
                     stack[it] = stack[it] + 1;
                     sum += triangle.get(it).get(stack[it]);
                     f = false;
-                    continue;
                 } else if (!r && f) {
-
+                    stack[it+1] = stack[it] + 1;
+                    sum += triangle.get(it).get(stack[it]);
+                    it++;
+                } else {
+                    stack[it+1] = stack[it];
+                    sum += triangle.get(it).get(stack[it]);
+                    it++;
                 }
-
             }
-
         }
-
+        return min;
     }
 
 }
