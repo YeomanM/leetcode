@@ -12,7 +12,7 @@ import java.util.List;
 public class FindNthDigit {
 
     public static void main(String[] args) {
-        System.out.println(new FindNthDigit().findNthDigit(1000));
+        System.out.println(new FindNthDigit().findNthDigit(1000000000));
     }
 
     public int findNthDigit(int n) {
@@ -20,7 +20,7 @@ public class FindNthDigit {
             return n;
         }
 
-        int z = 99;
+        int z = 9;
         int start = 90,index = 2,sum = 9,last = 9;
         while (true) {
             sum += index * start;
@@ -28,10 +28,11 @@ public class FindNthDigit {
                 break;
             }
             last = sum;
-            start *= 10;
             z += start;
+            start *= 10;
             index++;
         }
+        index--;
 
         if (sum == n) {
             return 9;
